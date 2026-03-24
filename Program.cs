@@ -27,5 +27,20 @@ namespace bankszamla
                 accounts.Add(new Account(line[0], line[1], decimal.Parse(line[2])));
             }
         }
+
+        static int CreateMenu()
+        {
+            Console.WriteLine("==== Bankszámla ====");
+            Console.WriteLine("1. Számlák megtekintése");
+            Console.WriteLine("2. Befizetés");
+            Console.WriteLine("3. Kifizetés");
+            Console.WriteLine("4. Utalás");
+            Console.WriteLine("5. Kilépés");
+            Console.WriteLine();
+            Console.Write("Választott menüpont: ");
+            int choice = int.Parse(Console.ReadLine());
+
+            return choice;
+        }
     }
 }
