@@ -12,10 +12,11 @@ namespace bankszamla
         static void Main(string[] args)
         {
             string fileName = "szamlak.txt";
-            ReadFile(fileName);
+            List<Account> accounts = ReadFile(fileName);
+            BankDashboard(accounts);
         }
 
-        static void ReadFile(string fileName)
+        static List<Account> ReadFile(string fileName)
         {
             StreamReader file = new StreamReader(fileName, Encoding.UTF8);
 
@@ -26,9 +27,11 @@ namespace bankszamla
                 string[] line = file.ReadLine().Split(';');
                 accounts.Add(new Account(line[0], line[1], decimal.Parse(line[2])));
             }
+
+            return accounts;
         }
 
-        static int CreateMenu()
+        static void CreateMenu()
         {
             Console.WriteLine("==== Bankszámla ====");
             Console.WriteLine("1. Számlák megtekintése");
@@ -38,9 +41,27 @@ namespace bankszamla
             Console.WriteLine("5. Kilépés");
             Console.WriteLine();
             Console.Write("Választott menüpont: ");
+        }
+
+        static void BankDashboard(List<Account> accounts)
+        {
+            CreateMenu();
             int choice = int.Parse(Console.ReadLine());
 
-            return choice;
+            switch (choice)
+            {
+                case 1:
+                    ViewAccounts(accounts);
+                    break;
+            }
+        }
+
+        static void ViewAccounts(List<Account> accounts)
+        {
+            foreach (Account account in accounts)
+            {
+                Console.WriteLine(account.ToString());
+            }
         }
     }
 }

@@ -39,5 +39,10 @@ namespace bankszamla
         {
             return creditLimit;
         }
+
+        public override string ToString()
+        {
+            return $"{GetAccountNumber()} - {GetName()} - Egyenleg: {GetBalance()} Ft";
+        }
     }
 }
