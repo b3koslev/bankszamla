@@ -8,16 +8,36 @@ namespace bankszamla
 {
     internal class Account
     {
-        private int accountNumber;
+        private string accountNumber;
         private string name;
         private decimal balance;
         private int creditLimit;
 
-        public Account(int accountNumber, string name, decimal balance)
+        public Account(string accountNumber, string name, decimal balance)
         {
             this.accountNumber = accountNumber;
             this.name = name;
             this.balance = balance;
+        }
+
+        public string GetAccountNumber()
+        {
+            return accountNumber;
+        }
+
+        public string GetName() 
+        { 
+            return name; 
+        }
+
+        public decimal GetBalance()
+        {
+            return balance;
+        }
+
+        public int GetCreditLimit()
+        {
+            return creditLimit;
         }
     }
 }
