@@ -9,31 +9,32 @@ namespace bankszamla
 {
     internal class Program
     {
-        static void Main(string[] args)
+        public List<Account> accounts = new List<Account>();
+        public List<string> logs = new List<string>();
+        static void Main(string[] args, List<Account> accounts, List<string> logs)
         {
             string fileName = "szamlak.txt";
-            List<Account> accounts = ReadFile(fileName);
+            ReadFile(fileName, accounts);
             BankDashboard(accounts);
         }
 
-        static List<Account> ReadFile(string fileName)
+        static void ReadFile(string fileName, List<Account> accounts)
         {
             StreamReader file = new StreamReader(fileName, Encoding.UTF8);
 
-            List<Account> accounts = new List<Account>();
 
             while (!file.EndOfStream)
             {
                 string[] line = file.ReadLine().Split(';');
                 accounts.Add(new Account(line[0], line[1], decimal.Parse(line[2]), 0));
             }
-
-            return accounts;
         }
 
         static void CreateMenu()
         {
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("==== Bankszámla ====");
+            Console.ResetColor();
             Console.WriteLine("1. Számlák megtekintése");
             Console.WriteLine("2. Befizetés");
             Console.WriteLine("3. Kifizetés");
@@ -54,6 +55,9 @@ namespace bankszamla
                 case 1:
                     ViewAccounts(accounts);
                     break;
+                case 2:
+                    Deposit(accounts);
+                    break;
             }
         }
 
@@ -62,6 +66,30 @@ namespace bankszamla
             foreach (Account account in accounts)
             {
                 Console.WriteLine(account.ToString());
+            }
+        }
+
+        static void Deposit(List<Account> accounts)
+        {
+            Console.Write("Adja meg, hogy melyik számlára szeretne pénzt feltölteni: ");
+            string accountNumber = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("Adja meg a befizetés összegét: ");
+            decimal amount = decimal.Parse(Console.ReadLine());
+
+            foreach (Account account in accounts)
+            {
+                if (account.GetAccountNumber() == accountNumber)
+                {
+                    if (account.Deposit(amount))
+                    {
+                        Console.WriteLine("A befizetés sikeres!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("A befizetés sikertelen!");
+                    }
+                }
             }
         }
     }

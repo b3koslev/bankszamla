@@ -18,7 +18,7 @@ namespace bankszamla
             this.accountNumber = accountNumber;
             this.name = name;
             this.balance = balance;
-            this.creditLimit = creditLimit;
+            this.creditLimit = (double) balance * 0.2;
         }
 
         public string GetAccountNumber()
@@ -41,9 +41,10 @@ namespace bankszamla
             return creditLimit;
         }
 
-        public void Deposit(int amount)
+        public bool Deposit(decimal amount)
         {
             balance += amount;
+            return true;
         }
 
         public bool WithDraw(int amount)
@@ -56,6 +57,20 @@ namespace bankszamla
             {
                 balance -= amount;
                 return true;
+            }
+        }
+
+        public bool Transfer(int amount, Account account)
+        {
+            if (amount < balance)
+            {
+                balance -= amount;
+                account.Deposit(amount);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
