@@ -9,10 +9,11 @@ namespace bankszamla
 {
     internal class Program
     {
-        public List<Account> accounts = new List<Account>();
-        public List<string> logs = new List<string>();
-        static void Main(string[] args, List<Account> accounts, List<string> logs)
+        static void Main(string[] args)
         {
+            List<Account> accounts = new List<Account>();
+            List<string> logs = new List<string>();
+
             string fileName = "szamlak.txt";
             ReadFile(fileName, accounts);
             BankDashboard(accounts);
@@ -45,7 +46,7 @@ namespace bankszamla
             Console.Write("Választott menüpont: ");
         }
 
-        static void BankDashboard(List<Account> accounts)
+        static void BankDashboard(List<Account> accounts, List<string> logs)
         {
             CreateMenu();
             int choice = int.Parse(Console.ReadLine());
@@ -61,7 +62,7 @@ namespace bankszamla
             }
         }
 
-        static void ViewAccounts(List<Account> accounts)
+        static void ViewAccounts(List<Account> accounts, List<string> logs)
         {
             foreach (Account account in accounts)
             {
@@ -69,13 +70,15 @@ namespace bankszamla
             }
         }
 
-        static void Deposit(List<Account> accounts)
+        static void Deposit(List<Account> accounts, List<string> logs)
         {
             Console.Write("Adja meg, hogy melyik számlára szeretne pénzt feltölteni: ");
             string accountNumber = Console.ReadLine();
             Console.WriteLine();
             Console.Write("Adja meg a befizetés összegét: ");
             decimal amount = decimal.Parse(Console.ReadLine());
+
+            DateTime date = DateTime.Now;
 
             foreach (Account account in accounts)
             {
@@ -84,6 +87,7 @@ namespace bankszamla
                     if (account.Deposit(amount))
                     {
                         Console.WriteLine("A befizetés sikeres!");
+                        logs.Add($"{account.GetAccountNumber()};{date};Befizetés;{account.GetBalance()}");
                     }
                     else
                     {
@@ -91,6 +95,7 @@ namespace bankszamla
                     }
                 }
             }
+
         }
     }
 }
