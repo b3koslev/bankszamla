@@ -25,7 +25,7 @@ namespace bankszamla
             while (!file.EndOfStream)
             {
                 string[] line = file.ReadLine().Split(';');
-                accounts.Add(new Account(line[0], line[1], decimal.Parse(line[2])));
+                accounts.Add(new Account(line[0], line[1], decimal.Parse(line[2]), 0));
             }
 
             return accounts;
@@ -38,7 +38,8 @@ namespace bankszamla
             Console.WriteLine("2. Befizetés");
             Console.WriteLine("3. Kifizetés");
             Console.WriteLine("4. Utalás");
-            Console.WriteLine("5. Kilépés");
+            Console.WriteLine("5. Hitelkeret módosítása");
+            Console.WriteLine("6. Kilépés");
             Console.WriteLine();
             Console.Write("Választott menüpont: ");
         }

@@ -11,13 +11,14 @@ namespace bankszamla
         private string accountNumber;
         private string name;
         private decimal balance;
-        private int creditLimit;
+        private double creditLimit;
 
-        public Account(string accountNumber, string name, decimal balance)
+        public Account(string accountNumber, string name, decimal balance, double creditLimit)
         {
             this.accountNumber = accountNumber;
             this.name = name;
             this.balance = balance;
+            this.creditLimit = creditLimit;
         }
 
         public string GetAccountNumber()
@@ -35,9 +36,27 @@ namespace bankszamla
             return balance;
         }
 
-        public int GetCreditLimit()
+        public double GetCreditLimit()
         {
             return creditLimit;
+        }
+
+        public void Deposit(int amount)
+        {
+            balance += amount;
+        }
+
+        public bool WithDraw(int amount)
+        {
+            if (amount > balance)
+            {
+                return false;
+            }
+            else
+            {
+                balance -= amount;
+                return true;
+            }
         }
 
         public override string ToString()
