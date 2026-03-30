@@ -54,10 +54,10 @@ namespace bankszamla
             switch (choice)
             {
                 case 1:
-                    ViewAccounts(accounts);
+                    ViewAccounts(accounts, logs);
                     break;
                 case 2:
-                    Deposit(accounts);
+                    Deposit(accounts, logs);
                     break;
             }
         }
@@ -92,6 +92,33 @@ namespace bankszamla
                     else
                     {
                         Console.WriteLine("A befizetés sikertelen!");
+                    }
+                }
+            }
+        }
+
+        static void WithDraw(List<Account> accounts, List<string> logs)
+        {
+            Console.Write("Adja meg, hogy melyik számlára szeretne pénzt feltölteni: ");
+            string accountNumber = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("Adja meg a befizetés összegét: ");
+            decimal amount = decimal.Parse(Console.ReadLine());
+
+            DateTime date = DateTime.Now;
+
+            foreach (Account account in accounts)
+            {
+                if (account.GetAccountNumber() == accountNumber)
+                {
+                    if (account.WithDraw(amount))
+                    {
+                        Console.WriteLine("A kifizetés sikeres!");
+                        logs.Add($"{account.GetAccountNumber()};{date};Kifizetés;{account.GetBalance()}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("A kifizetés sikertelen!");
                     }
                 }
             }

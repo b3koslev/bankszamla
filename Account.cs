@@ -47,7 +47,7 @@ namespace bankszamla
             return true;
         }
 
-        public bool WithDraw(int amount)
+        public bool WithDraw(decimal amount)
         {
             if (amount > balance)
             {
