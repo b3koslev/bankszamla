@@ -89,7 +89,7 @@ namespace bankszamla
 
         public override string ToString()
         {
-            return $"{GetAccountNumber()} - {GetName()} - Egyenleg: {GetBalance()} Ft - Hitelkeret összege: {GetCreditLimit()}";
+            return $"Számlaszám: {GetAccountNumber()} - Név: {GetName()} - Egyenleg: {GetBalance()} Ft - Hitelkeret összege: {GetCreditLimit()}";
         }
     }
 }
