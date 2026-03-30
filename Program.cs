@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace bankszamla
 {
@@ -58,34 +59,41 @@ namespace bankszamla
                 CreateMenu();
                 choice = int.Parse(Console.ReadLine());
 
+                Console.WriteLine();
+
                 switch (choice)
                 {
                     case 1:
                         ViewAccounts(accounts, logs);
+                        Console.WriteLine();
                         Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case 2:
                         Deposit(accounts, logs);
+                        Console.WriteLine();
                         Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case 3:
                         WithDraw(accounts, logs);
+                        Console.WriteLine();
                         Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case 4:
                         Transfer(accounts, logs);
+                        Console.WriteLine();
                         Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case 5:
                         ChangeCreditLimit(accounts, logs, startBalances);
+                        Console.WriteLine();
                         Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
                         Console.ReadKey();
                         Console.Clear();
@@ -165,13 +173,15 @@ namespace bankszamla
             string accountNumber1 = Console.ReadLine();
             Console.WriteLine();
 
-            Console.Write("Adja meg, hogy melyik számlára szeretne pénzt kivenni: ");
+            Console.Write("Adja meg, hogy melyik számlára szeretne utalni: ");
             string accountNumber2 = Console.ReadLine();
             Console.WriteLine();
 
-            Console.WriteLine("Adja meg az utalás összegét: ");
+            Console.Write("Adja meg az utalás összegét: ");
             int amount = int.Parse(Console.ReadLine());
             Console.WriteLine();
+
+            DateTime date = DateTime.Now;
 
             foreach (Account account1 in accounts)
             {
@@ -181,7 +191,16 @@ namespace bankszamla
                     {
                         if (account2.GetAccountNumber() == accountNumber2)
                         {
-                            account1.Transfer(amount, account2);
+                            if (account1.Transfer(amount, account2))
+                            {
+                                Console.WriteLine("Az utalás sikeres!");
+                                logs.Add($"{account1.GetAccountNumber()};{date};Utalás;{account1.GetBalance()}");
+                                logs.Add($"{account2.GetAccountNumber()};{date};Utalás;{account2.GetBalance()}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Az utalás sikertelen!");
+                            }
                         }
                     }
                 }
@@ -212,7 +231,7 @@ namespace bankszamla
                             {
                                 account.ChangeCreditLimit(amount);
                                 Console.WriteLine("A hitelkeret módosítása sikeres!");
-                                logs.Add($"{account.GetAccountNumber()};{date};Hitelkeret módosítása;{account.GetBalance()}");
+                                logs.Add($"{account.GetAccountNumber()};{date};Hitelkeret módosítás;{account.GetBalance()}");
                             }
                             else
                             {
