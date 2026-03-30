@@ -74,6 +74,12 @@ namespace bankszamla
                         Console.ReadKey();
                         Console.Clear();
                         break;
+                    case 4:
+                        Transfer(accounts, logs);
+                        Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
                     case 6:
                         FileWrite(accounts, logs);
                         break;
@@ -157,11 +163,17 @@ namespace bankszamla
             int amount = int.Parse(Console.ReadLine());
             Console.WriteLine();
 
-            foreach (Account account in accounts)
+            foreach (Account account1 in accounts)
             {
-                if (account.GetAccountNumber() == accountNumber1)
+                if (account1.GetAccountNumber() == accountNumber1)
                 {
-                    account.Transfer(amount, accountNumber2);
+                    foreach (Account account2 in accounts)
+                    {
+                        if (account2.GetAccountNumber() == accountNumber2)
+                        {
+                            account1.Transfer(amount, account2);
+                        }
+                    }
                 }
             }
         }
