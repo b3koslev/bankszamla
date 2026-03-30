@@ -15,20 +15,24 @@ namespace bankszamla
             List<string> logs = new List<string>();
 
             string fileName = "szamlak.txt";
-            ReadFile(fileName, accounts);
-            BankDashboard(accounts, logs);
+            Dictionary<string, int> startBalances = ReadFile(fileName, accounts);
+            BankDashboard(accounts, logs, startBalances);
         }
 
-        static void ReadFile(string fileName, List<Account> accounts)
+        static Dictionary<string, int> ReadFile(string fileName, List<Account> accounts)
         {
             StreamReader file = new StreamReader(fileName, Encoding.UTF8);
 
+            Dictionary<string, int> startBalances = new Dictionary<string, int>();
 
             while (!file.EndOfStream)
             {
                 string[] line = file.ReadLine().Split(';');
+                startBalances.Add(line[0], int.Parse(line[2]));
                 accounts.Add(new Account(line[0], line[1], decimal.Parse(line[2]), 0));
             }
+
+            return startBalances;
         }
 
         static void CreateMenu()
@@ -46,7 +50,7 @@ namespace bankszamla
             Console.Write("Választott menüpont: ");
         }
 
-        static void BankDashboard(List<Account> accounts, List<string> logs)
+        static void BankDashboard(List<Account> accounts, List<string> logs, Dictionary<string, int> startBalances)
         {
             int choice = 0;
             while (choice != 6)
@@ -76,6 +80,12 @@ namespace bankszamla
                         break;
                     case 4:
                         Transfer(accounts, logs);
+                        Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                    case 5:
+                        ChangeCreditLimit(accounts, logs, startBalances);
                         Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
                         Console.ReadKey();
                         Console.Clear();
@@ -172,6 +182,42 @@ namespace bankszamla
                         if (account2.GetAccountNumber() == accountNumber2)
                         {
                             account1.Transfer(amount, account2);
+                        }
+                    }
+                }
+            }
+        }
+
+        static void ChangeCreditLimit(List<Account> accounts, List<string> logs, Dictionary<string, int> startBalances)
+        {
+            Console.Write("Adja meg, hogy melyik számlához szeretne hitelkeretet módosítani: ");
+            string accountNumber = Console.ReadLine();
+            Console.WriteLine();
+
+            Console.Write("Adja meg a módosított hitelkeret összegét: ");
+            double amount = double.Parse(Console.ReadLine());
+            Console.WriteLine();
+
+            DateTime date = DateTime.Now;
+
+            foreach (Account account in accounts)
+            {
+                if (account.GetAccountNumber() == accountNumber)
+                {
+                    foreach (string startBalance in startBalances.Keys)
+                    {
+                        if (startBalance == account.GetAccountNumber())
+                        {
+                            if (amount < startBalances[startBalance] * 0.2)
+                            {
+                                account.ChangeCreditLimit(amount);
+                                Console.WriteLine("A hitelkeret módosítása sikeres!");
+                                logs.Add($"{account.GetAccountNumber()};{date};Hitelkeret módosítása;{account.GetBalance()}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("A hitelkeret módosítása sikertelen!");
+                            }
                         }
                     }
                 }

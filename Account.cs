@@ -18,7 +18,7 @@ namespace bankszamla
             this.accountNumber = accountNumber;
             this.name = name;
             this.balance = balance;
-            this.creditLimit = (double) balance * 0.2;
+            this.creditLimit = 0;
         }
 
         public string GetAccountNumber()
@@ -71,6 +71,19 @@ namespace bankszamla
             else
             {
                 return false;
+            }
+        }
+
+        public bool ChangeCreditLimit(double creditLimit)
+        {
+            if (creditLimit < 0)
+            {
+                return false;
+            }
+            else
+            {
+                this.creditLimit = creditLimit;
+                return true;
             }
         }
 
