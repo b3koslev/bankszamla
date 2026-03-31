@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,9 +26,9 @@ namespace bankszamla
             return accountNumber;
         }
 
-        public string GetName() 
-        { 
-            return name; 
+        public string GetName()
+        {
+            return name;
         }
 
         public decimal GetBalance()
@@ -49,7 +49,7 @@ namespace bankszamla
 
         public bool WithDraw(decimal amount, double creditLimit)
         {
-            if (amount > balance + (decimal) creditLimit)
+            if (amount > balance + (decimal)creditLimit)
             {
                 return false;
             }
@@ -62,7 +62,7 @@ namespace bankszamla
 
         public bool Transfer(int amount, Account account, double creditLimit)
         {
-            if (amount < balance + (decimal) creditLimit)
+            if (amount < balance + (decimal)creditLimit)
             {
                 balance -= amount;
                 account.Deposit(amount);
