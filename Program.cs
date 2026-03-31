@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,35 +66,35 @@ namespace bankszamla
                     case 1:
                         ViewAccounts(accounts, logs);
                         Console.WriteLine();
-                        Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
+                        Console.Write("Nyomjon meg egy gombot a kilépéshez... ");
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case 2:
                         Deposit(accounts, logs);
                         Console.WriteLine();
-                        Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
+                        Console.Write("Nyomjon meg egy gombot a kilépéshez... ");
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case 3:
                         WithDraw(accounts, logs);
                         Console.WriteLine();
-                        Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
+                        Console.Write("Nyomjon meg egy gombot a kilépéshez... ");
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case 4:
                         Transfer(accounts, logs);
                         Console.WriteLine();
-                        Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
+                        Console.Write("Nyomjon meg egy gombot a kilépéshez... ");
                         Console.ReadKey();
                         Console.Clear();
                         break;
                     case 5:
                         ChangeCreditLimit(accounts, logs, startBalances);
                         Console.WriteLine();
-                        Console.WriteLine("Nyomjon meg egy gombot a kilépéshez...");
+                        Console.Write("Nyomjon meg egy gombot a kilépéshez... ");
                         Console.ReadKey();
                         Console.Clear();
                         break;
@@ -131,12 +131,16 @@ namespace bankszamla
                 {
                     if (account.Deposit(amount))
                     {
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("A befizetés sikeres!");
+                        Console.ResetColor();
                         logs.Add($"{account.GetAccountNumber()};{date};Befizetés;{account.GetBalance()}");
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("A befizetés sikertelen!");
+                        Console.ResetColor();
                     }
                     accountFound = true;
                 }
@@ -144,7 +148,9 @@ namespace bankszamla
 
             if (!accountFound)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("A számla nem található!");
+                Console.ResetColor();
             }
         }
 
@@ -165,12 +171,16 @@ namespace bankszamla
                 {
                     if (account.WithDraw(amount, account.GetCreditLimit()))
                     {
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("A kifizetés sikeres!");
+                        Console.ResetColor();
                         logs.Add($"{account.GetAccountNumber()};{date};Kifizetés;{account.GetBalance()}");
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("A kifizetés sikertelen!");
+                        Console.ResetColor();
                     }
                     accountFound = true;
                 }
@@ -178,11 +188,13 @@ namespace bankszamla
 
             if (!accountFound)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("A számla nem található!");
+                Console.ResetColor();
             }
         }
 
-        static void Transfer(List<Account> accounts, List<string> logs) 
+        static void Transfer(List<Account> accounts, List<string> logs)
         {
             Console.Write("Adja meg, hogy melyik számláról szeretne utalni: ");
             string accountNumber1 = Console.ReadLine();
@@ -207,13 +219,17 @@ namespace bankszamla
                         {
                             if (account1.Transfer(amount, account2, account2.GetCreditLimit()))
                             {
+                                Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("Az utalás sikeres!");
+                                Console.ResetColor();
                                 logs.Add($"{account1.GetAccountNumber()};{date};Utalás;{account1.GetBalance()}");
                                 logs.Add($"{account2.GetAccountNumber()};{date};Befizetés;{account2.GetBalance()}");
                             }
                             else
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Az utalás sikertelen!");
+                                Console.ResetColor();
                             }
                         }
                         accountFound = true;
@@ -223,7 +239,9 @@ namespace bankszamla
 
             if (!accountFound)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("A számla nem található!");
+                Console.ResetColor();
             }
         }
 
@@ -239,6 +257,8 @@ namespace bankszamla
 
             DateTime date = DateTime.Now;
 
+            bool accountFound = false;
+
             foreach (Account account in accounts)
             {
                 if (account.GetAccountNumber() == accountNumber)
@@ -250,16 +270,29 @@ namespace bankszamla
                             if ((amount < startBalances[startBalance] * 0.2))
                             {
                                 account.ChangeCreditLimit(amount);
+                                Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("A hitelkeret módosítása sikeres!");
+                                Console.ResetColor();
                                 logs.Add($"{account.GetAccountNumber()};{date};Hitelkeret módosítás;{account.GetBalance()}");
                             }
                             else
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("A hitelkeret módosítása sikertelen!");
+                                Console.ResetColor();
                             }
+
+                            accountFound = true;
                         }
                     }
                 }
+            }
+
+            if (!accountFound)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("A számla nem található!");
+                Console.ResetColor();
             }
         }
 
@@ -281,7 +314,9 @@ namespace bankszamla
                 file.Close();
             }
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Napló sikeresen elmentve!");
+            Console.ResetColor();
         }
     }
 }
