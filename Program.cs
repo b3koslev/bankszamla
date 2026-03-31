@@ -123,6 +123,8 @@ namespace bankszamla
 
             DateTime date = DateTime.Now;
 
+            bool accountFound = false;
+
             foreach (Account account in accounts)
             {
                 if (account.GetAccountNumber() == accountNumber)
@@ -136,7 +138,13 @@ namespace bankszamla
                     {
                         Console.WriteLine("A befizetés sikertelen!");
                     }
+                    accountFound = true;
                 }
+            }
+
+            if (!accountFound)
+            {
+                Console.WriteLine("A számla nem található!");
             }
         }
 
@@ -148,6 +156,8 @@ namespace bankszamla
             decimal amount = decimal.Parse(Console.ReadLine());
 
             DateTime date = DateTime.Now;
+
+            bool accountFound = false;
 
             foreach (Account account in accounts)
             {
@@ -162,7 +172,13 @@ namespace bankszamla
                     {
                         Console.WriteLine("A kifizetés sikertelen!");
                     }
+                    accountFound = true;
                 }
+            }
+
+            if (!accountFound)
+            {
+                Console.WriteLine("A számla nem található!");
             }
         }
 
@@ -179,6 +195,7 @@ namespace bankszamla
             Console.WriteLine();
 
             DateTime date = DateTime.Now;
+            bool accountFound = false;
 
             foreach (Account account1 in accounts)
             {
@@ -199,8 +216,14 @@ namespace bankszamla
                                 Console.WriteLine("Az utalás sikertelen!");
                             }
                         }
+                        accountFound = true;
                     }
                 }
+            }
+
+            if (!accountFound)
+            {
+                Console.WriteLine("A számla nem található!");
             }
         }
 
