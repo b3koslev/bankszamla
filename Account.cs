@@ -13,7 +13,7 @@ namespace bankszamla
         private decimal balance;
         private double creditLimit;
 
-        public Account(string accountNumber, string name, decimal balance, double creditLimit)
+        public Account(string accountNumber, string name, decimal balance, decimal creditLimit)
         {
             this.accountNumber = accountNumber;
             this.name = name;
@@ -47,9 +47,9 @@ namespace bankszamla
             return true;
         }
 
-        public bool WithDraw(decimal amount)
+        public bool WithDraw(decimal amount, double creditLimit)
         {
-            if (amount > balance)
+            if (amount > balance + (decimal) creditLimit)
             {
                 return false;
             }
@@ -60,9 +60,9 @@ namespace bankszamla
             }
         }
 
-        public bool Transfer(int amount, Account account)
+        public bool Transfer(int amount, Account account, double creditLimit)
         {
-            if (amount < balance)
+            if (amount < balance + (decimal) creditLimit)
             {
                 balance -= amount;
                 account.Deposit(amount);

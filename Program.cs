@@ -117,7 +117,7 @@ namespace bankszamla
         {
             Console.Write("Adja meg, hogy melyik számlára szeretne pénzt feltölteni: ");
             string accountNumber = Console.ReadLine();
-            Console.WriteLine();
+
             Console.Write("Adja meg a befizetés összegét: ");
             decimal amount = decimal.Parse(Console.ReadLine());
 
@@ -144,7 +144,6 @@ namespace bankszamla
         {
             Console.Write("Adja meg, hogy melyik számláról szeretne pénzt kivenni: ");
             string accountNumber = Console.ReadLine();
-            Console.WriteLine();
             Console.Write("Adja meg a kifizetés összegét: ");
             decimal amount = decimal.Parse(Console.ReadLine());
 
@@ -154,7 +153,7 @@ namespace bankszamla
             {
                 if (account.GetAccountNumber() == accountNumber)
                 {
-                    if (account.WithDraw(amount))
+                    if (account.WithDraw(amount, account.GetCreditLimit()))
                     {
                         Console.WriteLine("A kifizetés sikeres!");
                         logs.Add($"{account.GetAccountNumber()};{date};Kifizetés;{account.GetBalance()}");
@@ -171,11 +170,9 @@ namespace bankszamla
         {
             Console.Write("Adja meg, hogy melyik számláról szeretne utalni: ");
             string accountNumber1 = Console.ReadLine();
-            Console.WriteLine();
 
             Console.Write("Adja meg, hogy melyik számlára szeretne utalni: ");
             string accountNumber2 = Console.ReadLine();
-            Console.WriteLine();
 
             Console.Write("Adja meg az utalás összegét: ");
             int amount = int.Parse(Console.ReadLine());
@@ -191,11 +188,11 @@ namespace bankszamla
                     {
                         if (account2.GetAccountNumber() == accountNumber2)
                         {
-                            if (account1.Transfer(amount, account2))
+                            if (account1.Transfer(amount, account2, account2.GetCreditLimit()))
                             {
                                 Console.WriteLine("Az utalás sikeres!");
                                 logs.Add($"{account1.GetAccountNumber()};{date};Utalás;{account1.GetBalance()}");
-                                logs.Add($"{account2.GetAccountNumber()};{date};Utalás;{account2.GetBalance()}");
+                                logs.Add($"{account2.GetAccountNumber()};{date};Befizetés;{account2.GetBalance()}");
                             }
                             else
                             {
@@ -227,7 +224,7 @@ namespace bankszamla
                     {
                         if (startBalance == account.GetAccountNumber())
                         {
-                            if (amount < startBalances[startBalance] * 0.2)
+                            if ((amount < startBalances[startBalance] * 0.2))
                             {
                                 account.ChangeCreditLimit(amount);
                                 Console.WriteLine("A hitelkeret módosítása sikeres!");
@@ -260,6 +257,8 @@ namespace bankszamla
                 }
                 file.Close();
             }
+
+            Console.WriteLine("Napló sikeresen elmentve!");
         }
     }
 }
